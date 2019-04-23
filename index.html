@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>SayWord Game</title>
+
+    <style type="text/css">        
+
+        @font-face {
+            font-family: 'OpenDyslexic3-Bold.ttf';
+            src: url('ttf/OpenDyslexic3-Bold.ttf');
+        }
+
+        @font-face {
+            font-family: 'OpenDyslexicAlta-Regular.ttf';
+            src: url('ttf/OpenDyslexicAlta-Regular.ttf');
+        }
+
+        body{
+            background-color: #F1F1E9;
+            color:#242729;
+            font-family: 'OpenDyslexicAlta-Regular.ttf';
+        }
+
+        .message{
+            font-size: 0.25em;
+        }
+
+        #mainbigdiv{
+            /* I don't know yet if I am going to use this*/
+            background-color: #FEFEF6;
+        }
+
+        #worddiv{
+            font-size:90px;
+            position: absolute;
+            text-align: center;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 200px;
+        }
+
+        img{
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+    </style>
+    
+  </head>
+
+  <body>
+        <div id="worddiv">
+            
+        </div>
+
+
+        <script>
+            
+            CONFIG_WORDS_PER_GAME = 10;
+
+            words = [
+                "och",
+                "att",
+                "det",
+                "som",
+                "en",
+                "på",
+                "är",
+                "av",
+                "för",
+                "med",
+                "till",
+                "den",
+                "har",
+                "de",
+                "inte",
+                "om",
+                "ett",
+                "han",
+                "men",
+                "var",
+                "jag",
+                "sig",
+                "från",
+                "vi",
+                "så",
+                "kan",
+                "man",
+                "när",
+                "år",
+                "säger",
+                "hon",
+                "under",
+                "också",
+                "efter",
+                "eller",
+                "nu",
+                "sin",
+                "där",
+                "vid",
+                "mot",
+                "ska",
+                "skulle",
+                "kommer",
+                "ut",
+                "får",
+                "finns",
+                "vara",
+                "hade",
+                "alla",
+                "andra",
+                "mycket",
+                "än",
+                "här",
+                "då",
+                "sedan",
+                "över",
+                "bara",
+                "in",
+                "blir",
+                "upp",
+                "även",
+                "vad",
+                "få",
+                "två",
+                "vill",
+                "ha",
+                "många",
+                "hur",
+                "mer",
+                "går",
+                "sverige",
+                "kronor",
+                "detta",
+                "nya",
+                "skall",
+                "hans",
+                "utan",
+                "sina",
+                "något",
+                "svenska",
+                "allt",
+                "första",
+                "fick",
+                "måste",
+                "mellan",
+                "blev",
+                "bli",
+                "dag",
+                "någon",
+                "några",
+                "sitt",
+                "stora",
+                "varit",
+                "dem",
+                "bland",
+                "kl",
+                "bra",
+                "tre",
+                "ta"
+            ];
+
+
+            words = [
+                "och",
+                "att",
+                "det",
+                "som",
+                "en",
+                "på",
+                "är",
+                "av",
+                "för",
+                "med",
+                "till",
+                "den",
+                "har",
+                "de",
+                "inte",
+                "om",
+                "ett",
+                "han",
+                "men",
+                "var",
+                "jag",
+                "sig",
+                "från",
+                "vi",
+                "så",
+                "kan",
+                "man",
+                "när",
+                "år",
+                "hon",
+                "nu",
+                "sin",
+                "där",
+                "vid",
+                "mot",
+                "ska",
+                "ut",
+                "får",
+                "vara",
+                "hade",
+                "alla",
+                "än",
+                "här",
+                "då",
+                "bara",
+                "in",
+                "upp",
+                "även",
+                "vad",
+                "få",
+                "två",
+                "vill",
+                "ha",,
+                "hur",
+                "mer",
+                "går",
+                "nya",
+                "bli",
+                "dag",
+                "bra",
+                "tre",
+                "ta"
+            ];
+
+            animals_filenames = [
+                "imgs/animals/honey-311047_640.png",
+                "imgs/animals/elephant-308776_640.png",
+                "imgs/animals/loin-470302_640.png",
+                "imgs/animals/insect-602547_640.png",
+                "imgs/animals/ghost-35852_640.png",
+                "imgs/animals/lamb-1388937_640.png",
+                "imgs/animals/cats-30746_640.png",
+                "imgs/animals/butterflies-1817644_640.png",
+                "imgs/animals/bee-icon-29428.jpg",
+                "imgs/animals/zebra-470305_640.png",
+                "imgs/animals/housefly-155460_640.png",
+                "imgs/animals/leopard-47727_640.png",
+                "imgs/animals/rat-152162_640.png",
+                "imgs/animals/snake-303696_640.png",
+                "imgs/animals/dog-27989_640.png",
+                "imgs/animals/anthropomorphized-animals-2023327_640.png",
+                "imgs/animals/giraffe-308771_640.png",
+                "imgs/animals/sheep-47527_640.png",
+                "imgs/animals/bee-1296273_640.png",
+                "imgs/animals/ladybird-297875_640.png"
+            ];
+
+
+            var counter = 0;
+            click_timestamps = [];
+
+        
+            var worddiv = document.querySelector("#worddiv");
+
+            function pick_random_from_array(my_array){
+                return my_array[Math.floor(Math.random()*my_array.length)];
+            }
+
+            function show_image_and_score(){
+                var average = compute_average(click_timestamps);
+                click_timestamps = [];
+                var image_url = pick_random_from_array(animals_filenames);
+                display_image(image_url);
+                show_text_message(average);
+                
+            }
+
+            function show_word() {
+                worddiv.style = null;
+                var word = pick_random_from_array(words)
+                worddiv.innerText = word;
+            }
+
+            function show_text_message(message){
+                message_el = document.createElement("p");
+                message_el.innerText = message;
+                message_el.classList.add("message");
+                worddiv.appendChild(message_el);
+            }
+
+            function compute_average(arr){
+                var differences = []
+                for (var i = 1; i < arr.length; i++) {
+                    differences.push(arr[i] - arr[i-1]);
+                }
+                var avg_millis = differences.reduce( ( p, c ) => p + c, 0 ) / differences.length;
+                var avg_secs =  avg_millis/1000;
+                var formated_result = Math.round(avg_secs * 100) / 100;
+                return formated_result;
+            }
+            
+            function on_click_callback(event){
+
+                click_timestamps.push(Date.now());
+                console.log(click_timestamps);
+                
+                if(counter % CONFIG_WORDS_PER_GAME == 0 && counter != 0){
+                    show_image_and_score();
+                }
+                else{
+                    show_word();
+                }
+                counter = counter + 1;
+            }
+
+            function activate_game_controls(){
+                document.onkeypress = on_click_callback;
+                document.onclick = on_click_callback;
+            }
+
+            function deactivate_game_controls(){
+                document.onkeypress = null;
+                document.onclick = null;
+            }
+
+            function display_image(url){
+                image_el = document.createElement("img");
+                image_el.src = url;
+                // just a hack for now. Make it really large
+                // as the current layout plays well with oversized images
+                //but not with small images
+                image_el.width = "5000"; 
+                worddiv.innerText = "";
+                worddiv.appendChild(image_el);
+                w = window.innerWidth;
+                h = window.innerHeight;
+
+                if( w > h){
+                    worddiv.style.height = "" + Math.round(h / 2) + "px";
+                }else{
+                    worddiv.style.width = "" + Math.round(w / 2) + "px";
+                }
+            }
+
+            function show_initial_screen(){
+                display_image("imgs/buttons/play3.svg");
+                show_text_message("Click on the image to start");
+            }
+
+            show_initial_screen();
+            activate_game_controls();
+
+            //TODO: get the timestamp in milisenconds like this
+
+            //TODO: sacar cartoons daqui
+            // https://pixabay.com/images/search/cartoon/
+
+        </script>
+
+
+  </body>
+</html>
