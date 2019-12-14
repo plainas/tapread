@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Wordpack util</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="wordpackutils.js"></script>
+
+</head>
+
+<body>
+    <h1>Hello, world</h1>
+
+    <textarea id="my_textarea" rows="15" cols="80">
+It was a dark and stormy night...
+but what is this??!?!??!
+
+
+And this? another pratagraph...
+but it has more lines
+morelineshere...more more moremore more
+
+
+what about this one??????
+
+Maecenas itellus.
+
+Pellentesque ut, molestie urna.
+
+
+    </textarea>
+
+    <br />
+    <button type="button" onclick="output_text()">Click Me!</button>
+
+    <br />
+
+    <pre id="target_element">
+    </pre>
+
+    <script>
+        function output_text(){
+            var input_text = document.getElementById('my_textarea').value;
+            var wordpack = string_to_wordpack(input_text);
+            console.log(wordpack);
+        }
+
+        raw_text = sync_get("wordpacks.txt");
+        parsed_text = parse_wordpacks_source(raw_text);
+        console.log(parsed_text);
+
+
+
+
+    </script>
+</body>
+
+</html>
