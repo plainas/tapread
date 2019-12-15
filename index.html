@@ -13,7 +13,19 @@
 
     <title>Tapread Game</title>
 
-    <style type="text/css">        
+    <style type="text/css">
+
+
+        /*
+        Because of user agent stylesheets, whatever that is
+        https://stackoverflow.com/questions/29307357/get-rid-of-webkit-padding-start-40px
+        */
+        * {
+        margin: 0;
+        padding: 0;
+        }
+
+        /* we're clear now...*/
 
         @font-face {
             font-family: 'OpenDyslexic3-Bold.ttf';
@@ -55,13 +67,45 @@
             max-height: 100%;
             object-fit: cover;
         }
+
+
+        #menu_ul{
+            font-size: 25px;
+            list-style-type: none;
+        }
+
     </style>
     
   </head>
 
   <body>
+
+        <div id="game_finishedmenu_div">
+            <ul id="finishedmenu_ul">
+                <li id="finishedmenu_play_again">🕹️ Spela igen! </li>
+                <li id="finishedmenu_back">↩ Tilbacka till main menu</li>
+            </ul>
+        </div>
+
+
+        <div id="settingsmenu_div">
+                <ul id="settingsmenu_ul">
+                    <li id="settingsmenu_pick_workpack">Select wordpack </li>
+                    <li id="settingsmenu_wordsperturn">words per turn: 10</li>
+                    <li id="settingsmenu_sound_on_off">sound</li>
+                </ul>
+            </div>
+
+
         <div id="worddiv">
-            
+                <div id="menudiv">
+                        <ul id="menu_ul">
+                            <li id="mainmenu_play">🕹️ Spela!</li>
+                            <li id="mainmenu_settings">⚙️ Inställningar</li>
+                            <li id="mainmenu_about">📜 Om spellet</li>
+                            <li id="mainmenu_language">🇸🇪Sprak</li>
+                        </ul>
+                    </div>
         </div>
 
 
@@ -69,42 +113,18 @@
             
             CONFIG_WORDS_PER_GAME = 10;
 
-
-            //TODO: get the wordpacks from localcache
-
-            // TODO: put all necessairy files available offline
-
             var raw_text = sync_get("wordpacks.txt");
             var parsed_text = parse_wordpacks_source(raw_text);
 
 
-            words = parsed_text[0].wordpack;
-            animals_filenames = [
-                "imgs/animals/honey-311047_640.png",
-                "imgs/animals/elephant-308776_640.png",
-                "imgs/animals/loin-470302_640.png",
-                "imgs/animals/insect-602547_640.png",
-                "imgs/animals/ghost-35852_640.png",
-                "imgs/animals/lamb-1388937_640.png",
-                "imgs/animals/cats-30746_640.png",
-                "imgs/animals/butterflies-1817644_640.png",
-                "imgs/animals/bee-icon-29428.jpg",
-                "imgs/animals/zebra-470305_640.png",
-                "imgs/animals/housefly-155460_640.png",
-                "imgs/animals/leopard-47727_640.png",
-                "imgs/animals/rat-152162_640.png",
-                "imgs/animals/snake-303696_640.png",
-                "imgs/animals/dog-27989_640.png",
-                "imgs/animals/anthropomorphized-animals-2023327_640.png",
-                "imgs/animals/giraffe-308771_640.png",
-                "imgs/animals/sheep-47527_640.png",
-                "imgs/animals/bee-1296273_640.png",
-                "imgs/animals/ladybird-297875_640.png"
-            ];
+            var words = parsed_text[0].wordpack;
 
+            var imagelist_raw_text = sync_get("prizeimagelist.txt");
+
+            var animals_filenames = imagelist_raw_text.split("\n");
 
             var counter = 0;
-            click_timestamps = [];
+            var click_timestamps = [];
 
         
             var worddiv = document.querySelector("#worddiv");
@@ -153,6 +173,7 @@
                 
                 if(counter % CONFIG_WORDS_PER_GAME == 0 && counter != 0){
                     show_image_and_score();
+                    deactivate_game_controls();
                 }
                 else{
                     show_word();
@@ -171,6 +192,7 @@
             }
 
             function display_image(url){
+                console.log("display image called");
                 image_el = document.createElement("img");
                 image_el.src = url;
                 // just a hack for now. Make it really large
@@ -191,13 +213,23 @@
 
             function show_initial_screen(){
                 display_image("imgs/buttons/play3.svg");
-                show_text_message("Click on the image to start");
+                show_text_message("Ready? Click on the image to start");
+
+                setTimeout(activate_game_controls, 150);
+                //worddiv.querySelector("img").onclick = activate_game_controls();
+                // activate_game_controls();
             }
 
-            show_initial_screen();
-            activate_game_controls();
+            function hook_up_main_menu_actions(){
+                document.querySelector("#mainmenu_play").onclick = show_initial_screen;
+                // document.querySelector("mainmenu_settings") = null;
+                // document.querySelector("mainmenu_about").onclick = null;
+            }
 
-            //TODO: get the timestamp in milisenconds like this
+            hook_up_main_menu_actions();
+
+            //show_initial_screen();
+            //activate_game_controls();
 
             //TODO: sacar cartoons daqui
             // https://pixabay.com/images/search/cartoon/

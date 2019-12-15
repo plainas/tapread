@@ -3,6 +3,7 @@
 - [ ] start menu (button before playing the game)
 - [ ] popup modal to hold menus and other stuff like that
 - [ ] picking the wordpacks and saving the default one in html local cache
+- [ ] put all necessairy files available offline
 
 ## notes
 
