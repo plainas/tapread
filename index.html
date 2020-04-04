@@ -74,21 +74,40 @@
             list-style-type: none;
         }
 
+        #game_finishedmenu_div{
+            display: none;
+        }
+
+        #finishedmenu_ul{
+            font-size: 25px;
+            list-style-type: none;
+        }
+
+
+        #settingsmenu_div{
+            display: none;
+        }
+
+        #menudiv{
+            display: none;
+        }
+
     </style>
     
   </head>
 
   <body>
 
-        <div id="game_finishedmenu_div">
-            <ul id="finishedmenu_ul">
-                <li id="finishedmenu_play_again">🕹️ Spela igen! </li>
-                <li id="finishedmenu_back">↩ Tilbacka till main menu</li>
-            </ul>
-        </div>
+        <div id="worddiv">
 
+            <div id="game_finishedmenu_div">
+                <ul id="finishedmenu_ul">
+                    <li id="finishedmenu_play_again">🕹️ Spela igen! </li>
+                    <li id="finishedmenu_back">↩ Tilbacka till main menu</li>
+                </ul>
+            </div>
 
-        <div id="settingsmenu_div">
+            <div id="settingsmenu_div">
                 <ul id="settingsmenu_ul">
                     <li id="settingsmenu_pick_workpack">Select wordpack </li>
                     <li id="settingsmenu_wordsperturn">words per turn: 10</li>
@@ -96,21 +115,22 @@
                 </ul>
             </div>
 
+            <div id="menudiv">
+                <ul id="menu_ul">
+                    <li id="mainmenu_play">🕹️ Spela!</li>
+                    <li id="mainmenu_settings">⚙️ Inställningar</li>
+                    <li id="mainmenu_about">📜 Om spellet</li>
+                    <li id="mainmenu_language">🇸🇪 Sprak</li>
+                </ul>
+            </div>
 
-        <div id="worddiv">
-                <div id="menudiv">
-                        <ul id="menu_ul">
-                            <li id="mainmenu_play">🕹️ Spela!</li>
-                            <li id="mainmenu_settings">⚙️ Inställningar</li>
-                            <li id="mainmenu_about">📜 Om spellet</li>
-                            <li id="mainmenu_language">🇸🇪 Sprak</li>
-                        </ul>
-                    </div>
         </div>
+            
+        
 
 
         <script>
-            
+
             CONFIG_WORDS_PER_GAME = 10;
 
             var raw_text = sync_get("wordpacks.txt");
@@ -128,6 +148,8 @@
 
         
             var worddiv = document.querySelector("#worddiv");
+            var play_again_menu_element = document.getElementById("game_finishedmenu_div");
+
 
             function pick_random_from_array(my_array){
                 return my_array[Math.floor(Math.random()*my_array.length)];
@@ -139,6 +161,15 @@
                 var image_url = pick_random_from_array(animals_filenames);
                 display_image(image_url);
                 show_text_message(average);
+
+                worddiv.appendChild(play_again_menu_element);
+                play_again_menu_element.style.display = 'block';
+
+                // HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!!
+                // HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!!
+                // continue here! I sucessfully put the game finished menu here, next step, attach clickable actions
+                // to it!!!!
+
                 
             }
 
@@ -169,7 +200,7 @@
             function on_click_callback(event){
 
                 click_timestamps.push(Date.now());
-                console.log(click_timestamps);
+                //console.log(click_timestamps);
                 
                 if(counter % CONFIG_WORDS_PER_GAME == 0 && counter != 0){
                     show_image_and_score();
@@ -226,9 +257,9 @@
                 // document.querySelector("mainmenu_about").onclick = null;
             }
 
-            hook_up_main_menu_actions();
+            //hook_up_main_menu_actions();
 
-            //show_initial_screen();
+            show_initial_screen();
             //activate_game_controls();
 
             //TODO: sacar cartoons daqui
