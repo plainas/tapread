@@ -68,7 +68,6 @@
             object-fit: cover;
         }
 
-
         #menu_ul{
             font-size: 25px;
             list-style-type: none;
@@ -87,7 +86,6 @@
             font-size: 25px;
             list-style-type: none;
         }
-
 
         #settingsmenu_div{
             display: none;
@@ -148,6 +146,8 @@
             var raw_text = sync_get("wordpacks.txt");
             var parsed_text = parse_wordpacks_source(raw_text);
 
+
+            //TODO: user the wordpack key instead maybe?
 
             if (!localStorage.getItem('wordpack_index') || localStorage.getItem("wordpack_index") >= parsed_text.length){
                 localStorage.setItem('wordpack_index', 0);
@@ -284,12 +284,31 @@
                 worddiv.appendChild(settings_menu_element);
                 settings_menu_element.style.display = 'block';
 
+
+                //TODO: move these two setups of values to outside this funciton
+                //no need to do this eath time, do it on game startup
                 wordcount_select_el = document.getElementById("wordcount");
                 
                 wordcount_select_el.onchange = function(){
                     var selected_val = parseInt(wordcount_select_el.value);
                     localStorage.setItem('CONFIG_WORDS_PER_GAME', selected_val);
                 };
+
+                var wordpack_select_el = document.getElementById("wordpack_select"); 
+
+                parsed_text.forEach((word_pack_item, idx) => {
+                    var option_el = document.createElement("option");
+                    option_el.text = word_pack_item.title;
+                    //option_el.value = word_pack_item.key;
+                    option_el.value = idx;
+                    wordpack_select_el.add(option_el);
+                });
+
+                wordpack_select_el.onchange = function(){
+                    var selected_val = parseInt(wordpack_select_el.value);
+                    localStorage.setItem('wordpack_index', selected_val);
+                    words = parsed_text[localStorage.getItem("wordpack_index")].wordpack;
+                }
 
 
                 //document.querySelector("#mainmenu_play").onclick = show_get_ready_screen;
