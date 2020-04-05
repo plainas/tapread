@@ -88,7 +88,7 @@
             display: none;
         }
 
-        #menudiv{
+        #mainmenu_div{
             display: none;
         }
 
@@ -115,7 +115,7 @@
                 </ul>
             </div>
 
-            <div id="menudiv">
+            <div id="mainmenu_div">
                 <ul id="menu_ul">
                     <li id="mainmenu_play">🕹️ Spela!</li>
                     <li id="mainmenu_settings">⚙️ Inställningar</li>
@@ -149,6 +149,7 @@
         
             var worddiv = document.querySelector("#worddiv");
             var play_again_menu_element = document.getElementById("game_finishedmenu_div");
+            var main_menu_element = document.getElementById("mainmenu_div");
 
 
             function pick_random_from_array(my_array){
@@ -170,10 +171,8 @@
                 play_again_menu_element.style.display = 'block';
 
 
-                document.getElementById("finishedmenu_play_again").onclick = show_initial_screen;
-                document.getElementById("finishedmenu_back").onclick = function(){
-                    alert("TODO: implement back to main menu.")
-                };
+                document.getElementById("finishedmenu_play_again").onclick = show_get_ready_screen;
+                document.getElementById("finishedmenu_back").onclick = show_main_menu;
 
                 // HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!!
                 // HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!!
@@ -251,7 +250,7 @@
                 }
             }
 
-            function show_initial_screen(){
+            function show_get_ready_screen(){
                 display_image("imgs/buttons/play3.svg");
                 show_text_message("Ready? Click on the image to start");
 
@@ -260,15 +259,19 @@
                 // activate_game_controls();
             }
 
-            function hook_up_main_menu_actions(){
-                document.querySelector("#mainmenu_play").onclick = show_initial_screen;
+            function show_main_menu(){
+                worddiv.innerText = "";
+                worddiv.appendChild(main_menu_element);
+                main_menu_element.style.display = 'block';
+
+                document.querySelector("#mainmenu_play").onclick = show_get_ready_screen;
                 // document.querySelector("mainmenu_settings") = null;
                 // document.querySelector("mainmenu_about").onclick = null;
             }
 
-            //hook_up_main_menu_actions();
+            show_main_menu();
 
-            show_initial_screen();
+            //show_get_ready_screen();
             //activate_game_controls();
 
             //TODO: sacar cartoons daqui
