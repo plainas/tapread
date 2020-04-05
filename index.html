@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />                                                                                                                     
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <meta name="mobile-web-app-capable" content="yes">
@@ -74,6 +74,11 @@
             list-style-type: none;
         }
 
+        #settingsmenu_ul{
+            font-size: 25px;
+            list-style-type: none;
+        }
+
         #game_finishedmenu_div{
             display: none;
         }
@@ -109,9 +114,16 @@
 
             <div id="settingsmenu_div">
                 <ul id="settingsmenu_ul">
-                    <li id="settingsmenu_pick_workpack">Select wordpack </li>
-                    <li id="settingsmenu_wordsperturn">words per turn: 10</li>
+                    <li id="settingsmenu_pick_workpack">Select wordpack <select id="wordpack_select" name="wordpack_select"> </select></li>
+                    <li id="settingsmenu_wordsperturn">words per turn: <select id="wordcount" name="wordcount">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="35">35</option>
+                        <option value="50">50</option>
+                    </select>
+                    </li>
                     <li id="settingsmenu_sound_on_off">sound</li>
+                    <li id="settingsmenu_back">↩ Tilbacka till main menu</li>
                 </ul>
             </div>
 
@@ -125,19 +137,23 @@
             </div>
 
         </div>
-            
-        
 
 
         <script>
 
-            CONFIG_WORDS_PER_GAME = 10;
+            if (!localStorage.getItem('CONFIG_WORDS_PER_GAME')){
+                localStorage.setItem('CONFIG_WORDS_PER_GAME', 10)
+            }
 
             var raw_text = sync_get("wordpacks.txt");
             var parsed_text = parse_wordpacks_source(raw_text);
 
 
-            var words = parsed_text[0].wordpack;
+            if (!localStorage.getItem('wordpack_index') || localStorage.getItem("wordpack_index") >= parsed_text.length){
+                localStorage.setItem('wordpack_index', 0);
+            }
+
+            var words = parsed_text[localStorage.getItem("wordpack_index")].wordpack;
 
             var imagelist_raw_text = sync_get("prizeimagelist.txt");
 
@@ -150,6 +166,7 @@
             var worddiv = document.querySelector("#worddiv");
             var play_again_menu_element = document.getElementById("game_finishedmenu_div");
             var main_menu_element = document.getElementById("mainmenu_div");
+            var settings_menu_element = document.getElementById("settingsmenu_div");
 
 
             function pick_random_from_array(my_array){
@@ -170,15 +187,8 @@
                 worddiv.appendChild(play_again_menu_element);
                 play_again_menu_element.style.display = 'block';
 
-
                 document.getElementById("finishedmenu_play_again").onclick = show_get_ready_screen;
                 document.getElementById("finishedmenu_back").onclick = show_main_menu;
-
-                // HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!!
-                // HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!!
-                // continue here! I sucessfully put the game finished menu here, next step, attach clickable actions
-                // to it!!!!
-
             }
 
             function show_word() {
@@ -210,7 +220,7 @@
                 click_timestamps.push(Date.now());
                 //console.log(click_timestamps);
                 
-                if(counter % CONFIG_WORDS_PER_GAME == 0 && counter != 0){
+                if(counter % localStorage.getItem('CONFIG_WORDS_PER_GAME') == 0 && counter != 0){
                     show_image_and_score();
                     deactivate_game_controls();
                 }
@@ -265,7 +275,25 @@
                 main_menu_element.style.display = 'block';
 
                 document.querySelector("#mainmenu_play").onclick = show_get_ready_screen;
-                // document.querySelector("mainmenu_settings") = null;
+                document.querySelector("#mainmenu_settings").onclick = show_settings_menu;
+                // document.querySelector("mainmenu_about").onclick = null;
+            }
+
+            function show_settings_menu(){
+                worddiv.innerText = "";
+                worddiv.appendChild(settings_menu_element);
+                settings_menu_element.style.display = 'block';
+
+                wordcount_select_el = document.getElementById("wordcount");
+                
+                wordcount_select_el.onchange = function(){
+                    var selected_val = parseInt(wordcount_select_el.value);
+                    localStorage.setItem('CONFIG_WORDS_PER_GAME', selected_val);
+                };
+
+
+                //document.querySelector("#mainmenu_play").onclick = show_get_ready_screen;
+                document.getElementById("settingsmenu_back").onclick = show_main_menu;
                 // document.querySelector("mainmenu_about").onclick = null;
             }
 
