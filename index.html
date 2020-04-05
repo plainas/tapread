@@ -162,15 +162,24 @@
                 display_image(image_url);
                 show_text_message(average);
 
+                show_game_finished_menu();
+            }
+
+            function show_game_finished_menu(){
                 worddiv.appendChild(play_again_menu_element);
                 play_again_menu_element.style.display = 'block';
+
+
+                document.getElementById("finishedmenu_play_again").onclick = show_initial_screen;
+                document.getElementById("finishedmenu_back").onclick = function(){
+                    alert("TODO: implement back to main menu.")
+                };
 
                 // HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!!
                 // HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!! HERE HERE HERE!!!!
                 // continue here! I sucessfully put the game finished menu here, next step, attach clickable actions
                 // to it!!!!
 
-                
             }
 
             function show_word() {
@@ -266,7 +275,6 @@
             // https://pixabay.com/images/search/cartoon/
 
         </script>
-
 
   </body>
 </html>
